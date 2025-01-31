@@ -1,9 +1,11 @@
 import {
-    Body,
+  Body,
   Controller,
   Get,
   HttpException,
   HttpStatus,
+  Param,
+  ParseIntPipe,
   Post,
 } from '@nestjs/common';
 import { SongsService } from './songs.service';
@@ -31,5 +33,21 @@ export class SongsController {
         },
       );
     }
+  }
+
+  //   @Get(':id')
+  //   async findOne(@Param('id', new ParseIntPipe()) id: number) {
+  //     return this.songService.find(id);
+  //   }
+
+  @Get(':id')
+  async findOne(
+    @Param(
+      'id',
+      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),
+    )
+    id: number,
+  ) {
+    return this.songService.find(id);
   }
 }

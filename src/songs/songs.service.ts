@@ -13,4 +13,8 @@ export class SongsService {
   async findAll() {
     return this.songs;
   }
+
+  async find(id: number) {
+    return this.songs.at(id);
+  }
 }
