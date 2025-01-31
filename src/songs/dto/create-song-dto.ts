@@ -7,5 +7,6 @@ export class CreateSongDto {
 
   @IsNotEmpty({ message: 'artist cannot be empty' })
   @IsArray({ message: 'artist must be an array ' })
+  @IsString({ each: true }) // each element of the array should be string
   readonly artist: string[];
 }
