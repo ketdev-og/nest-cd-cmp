@@ -4,16 +4,23 @@ import {
   Get,
   HttpException,
   HttpStatus,
+  Inject,
   Param,
   ParseIntPipe,
   Post,
 } from '@nestjs/common';
 import { SongsService } from './songs.service';
 import { CreateSongDto } from './dto/create-song-dto';
+import { Connection } from 'src/common/constants/connection';
 
 @Controller('songs')
 export class SongsController {
-  constructor(private songService: SongsService) {}
+  constructor(
+    private songService: SongsService,
+    @Inject('CONNECTION') private connect: Connection,
+  ) {
+    console.log(this.connect);
+  }
 
   @Get()
   async findAll() {

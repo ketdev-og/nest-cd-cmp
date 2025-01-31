@@ -18,7 +18,6 @@ export class AppModule implements NestModule {
     //   path: 'songs',
     //   method: RequestMethod.POST,
     // }); //option 2, select method that should have the middlewares
-
     consumer.apply(LoggerMiddleware).forRoutes(SongsController); //Option 3 use for the entire controller
   }
 }
