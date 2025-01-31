@@ -18,8 +18,10 @@ export class SongsController {
   constructor(
     private songService: SongsService,
     @Inject('CONNECTION') private connect: Connection,
+    @Inject('CONFIG') private config: unknown,
   ) {
     console.log(this.connect);
+    console.log(config);
   }
 
   @Get()
