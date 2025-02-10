@@ -5,8 +5,10 @@ import { SongsService } from './songs/songs.service';
 import { SongsModule } from './songs/songs.module';
 import { LoggerMiddleware } from './common/middleware/logger/logger.middleware';
 import { SongsController } from './songs/songs.controller';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from 'joi';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Songs } from './models/songs.entity';
 
 @Module({
   imports: [
@@ -15,8 +17,20 @@ import * as Joi from 'joi';
       isGlobal: true,
       validationSchema: Joi.object({
         PORT: Joi.number().default(3000),
-        DATABASE_URL: Joi.string().required(),
-        JWT_SECRET: Joi.string().min(10).required(),
+      }),
+    }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule], // Load database config from .env
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        host: configService.get<string>('DB_HOST'),
+        port: configService.get<number>('DB_PORT'),
+        username: configService.get<string>('DB_USER'),
+        password: configService.get<string>('DB_PASSWORD'),
+        database: configService.get<string>('DB_NAME'),
+        entities: [Songs],
+        synchronize: true, // ⚠️ Auto-sync schema (disable in production)
       }),
     }),
   ],
